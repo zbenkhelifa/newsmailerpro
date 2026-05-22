@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MailSender Pro — Envoyez les identifiants de vos élèves en un clic</title>
+  <meta name="description" content="Application bureau pour enseignants : envoyez les identifiants ENT de toute une classe par email en quelques secondes.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #1e3a5f;
+      --blue:  #2563eb;
+      --light: #eff6ff;
+      --gray:  #64748b;
+      --text:  #1e293b;
+      --white: #ffffff;
+      --green: #16a34a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { color: var(--white); font-size: 1.2rem; font-weight: 700; }
+    .logo span { color: #93c5fd; }
+    header a.cta-small {
+      background: var(--blue);
+      color: var(--white);
+      padding: 8px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    header a.cta-small:hover { opacity: .85; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #2d5a9e 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 80px 24px 100px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      color: #bfdbfe;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+    .hero h1 em { color: #93c5fd; font-style: normal; }
+    .hero p {
+      font-size: 1.15rem;
+      color: #bfdbfe;
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+    .hero-note { margin-top: 16px; font-size: 0.85rem; color: #93c5fd; }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 80px 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 48px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+    .card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 28px 24px;
+    }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .card h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .card p  { font-size: 0.9rem; color: var(--gray); }
+
+    /* ── HOW IT WORKS ── */
+    .howto {
+      background: var(--navy);
+      color: var(--white);
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .howto .section-title { color: var(--white); }
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .step { max-width: 220px; }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    .step p  { font-size: 0.875rem; color: #93c5fd; }
+
+    /* ── PRICING ── */
+    .pricing {
+      padding: 80px 24px;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* Toggle mensuel / annuel */
+    .billing-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 6px 8px;
+      margin: 32px auto 48px;
+    }
+    .toggle-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray);
+      padding: 8px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .toggle-label.active {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+    .saving-pill {
+      background: #dcfce7;
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .plan {
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 36px 28px;
+      position: relative;
+      text-align: left;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .plan.highlighted {
+      border-color: var(--blue);
+      box-shadow: 0 8px 32px rgba(37,99,235,.15);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .plan-price { font-size: 2.8rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .plan-price sup { font-size: 1.2rem; vertical-align: super; }
+    .plan-price .period { font-size: 1rem; font-weight: 400; color: var(--gray); }
+    .plan-equiv { font-size: 0.85rem; color: var(--gray); margin-top: 6px; min-height: 20px; }
+    .plan ul { list-style: none; margin: 20px 0 28px; }
+    .plan ul li {
+      font-size: 0.9rem;
+      color: var(--text);
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan ul li::before { content: "✓"; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .btn-plan {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-plan:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-outline  { background: var(--white); color: var(--navy); border: 2px solid var(--navy); }
+    .plan-note { font-size: 0.8rem; color: var(--gray); margin-top: 12px; text-align: center; }
+
+    /* Plan hidden quand non sélectionné */
+    .plan[data-period] { display: none; }
+    .plan[data-period].visible { display: block; }
+
+    /* ── FAQ ── */
+    .faq {
+      background: #f8fafc;
+      padding: 80px 24px;
+    }
+    .faq-inner { max-width: 700px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid #e2e8f0; padding: 20px 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h4 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .faq-item p  { font-size: 0.9rem; color: var(--gray); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: #93c5fd;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+    }
+    footer a { color: #bfdbfe; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 520px) {
+      .hero { padding: 60px 20px 80px; }
+      .plan { padding: 28px 20px; }
+      .billing-toggle { flex-wrap: wrap; justify-content: center; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">MailSender <span>Pro</span></div>
+  <a class="cta-small" href="#pricing">Voir les tarifs</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">Pour les enseignants</div>
+  <h1>Envoyez les identifiants de vos élèves <em>en un clic</em></h1>
+  <p>Importez votre fichier CSV, et MailSender Pro envoie automatiquement les accès ENT à chaque élève — ou à ses parents.</p>
+  <a class="hero-cta" href="#pricing">Commencer dès maintenant</a>
+  <p class="hero-note">Dès 2,99 € / mois · Sans engagement · Annulez à tout moment</p>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-icon">📂</div>
+      <h3>Import CSV en un clic</h3>
+      <p>Chargez l'export de votre logiciel de gestion (Pronote, ScoDoc…) et la liste est prête en quelques secondes.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">✉️</div>
+      <h3>Envoi automatisé</h3>
+      <p>Chaque élève (ou parent) reçoit un email personnalisé avec ses propres identifiants. Aucun copier-coller.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <h3>Anti-spam intégré</h3>
+      <p>Un délai configurable entre chaque envoi évite d'être bloqué par les serveurs mail de votre établissement.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>Application bureau légère</h3>
+      <p>Zéro installation complexe, zéro dépendance. Fonctionne sur Windows, même sur les ordinateurs de l'établissement.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>Données sur votre machine</h3>
+      <p>Aucune donnée élève n'est envoyée à un serveur externe. Tout reste sur votre ordinateur.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎓</div>
+      <h3>Conçu par un enseignant</h3>
+      <p>Développé par un enseignant de l'Académie de Versailles pour répondre à un vrai besoin du terrain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="howto">
+  <h2 class="section-title">Comment ça marche ?</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Téléchargez l'application</h4>
+      <p>Un simple fichier .exe, aucune installation requise.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Activez votre licence</h4>
+      <p>Saisissez la clé reçue par email lors de votre abonnement.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Importez votre classe</h4>
+      <p>Chargez le fichier CSV exporté depuis votre logiciel de gestion.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Lancez l'envoi</h4>
+      <p>Cliquez sur Envoyer — chaque élève reçoit ses identifiants.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <h2 class="section-title">Tarifs simples et transparents</h2>
+  <p style="color:var(--gray);max-width:500px;margin:0 auto;">Un abonnement, jusqu'à 3 postes activés simultanément. Résiliable à tout moment.</p>
+
+  <!-- Toggle mensuel / annuel -->
+  <div class="billing-toggle">
+    <span class="toggle-label active" id="btn-monthly" onclick="setBilling('monthly')">Mensuel</span>
+    <span class="toggle-label" id="btn-yearly" onclick="setBilling('yearly')">
+      Annuel &nbsp;<span class="saving-pill">−41 %</span>
+    </span>
+  </div>
+
+  <div class="plans">
+
+    <!-- MENSUEL -->
+    <div class="plan visible" data-period="monthly">
+      <div class="plan-name">Mensuel</div>
+      <div class="plan-price"><sup>€</sup>2,99<span class="period"> / mois</span></div>
+      <div class="plan-equiv">soit 35,88 € / an</div>
+      <ul>
+        <li>Envoi illimité d'identifiants</li>
+        <li>Import CSV</li>
+        <li>3 postes inclus</li>
+        <li>Mises à jour incluses</li>
+        <li>Support par email</li>
+      </ul>
+      <a class="btn-plan btn-outline" href="https://buy.stripe.com/eVqdR9bRG2gl3zzfpjeQM03">S'abonner au mois</a>
+      <p class="plan-note">Sans engagement · Annulez à tout moment</p>
+    </div>
+
+    <!-- ANNUEL -->
+    <div class="plan highlighted" data-period="yearly">
+      <div class="popular-badge">⭐ Meilleur rapport qualité-prix</div>
+      <div class="plan-name">Annuel</div>
+      <div class="plan-price"><sup>€</sup>29<span class="period"> / an</span></div>
+      <div class="plan-equiv">soit 2,42 € / mois — <strong style="color:var(--green)">économisez 6,88 €</strong></div>
+      <ul>
+        <li>Envoi illimité d'identifiants</li>
+        <li>Import CSV</li>
+        <li>3 postes inclus</li>
+        <li>Mises à jour incluses</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <a class="btn-plan btn-primary" href="https://buy.stripe.com/dRmbJ13la9INb21dhbeQM02">S'abonner à l'année</a>
+      <p class="plan-note">Renouvellement automatique · Résiliable</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="section-title">Questions fréquentes</h2>
+    <div class="faq-item">
+      <h4>Sur combien d'ordinateurs puis-je installer l'application ?</h4>
+      <p>Votre licence autorise jusqu'à 3 activations simultanées. Vous pouvez désactiver un poste pour en activer un autre.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Les données de mes élèves sont-elles sécurisées ?</h4>
+      <p>Oui. MailSender Pro fonctionne entièrement en local. Aucun fichier élève n'est envoyé à nos serveurs.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Puis-je annuler mon abonnement ?</h4>
+      <p>Oui, à tout moment depuis votre espace Stripe. Votre accès reste actif jusqu'à la fin de la période payée.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Quel format de fichier CSV est accepté ?</h4>
+      <p>Le format standard avec colonnes Nom, Prénom, Email (et optionnellement Email parent, Login, Mot de passe). Un fichier exemple est fourni dans l'application.</p>
+    </div>
+    <div class="faq-item">
+      <h4>L'application fonctionne-t-elle sur Mac ou Linux ?</h4>
+      <p>La version actuelle est disponible uniquement pour Windows. Une version Mac est prévue prochainement.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Comment obtenir ma clé de licence après le paiement ?</h4>
+      <p>Elle vous est envoyée automatiquement par email dès confirmation du paiement. Vérifiez vos spams si vous ne la recevez pas dans les 5 minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 MailSender Pro · <a href="mailto:codeappli09@gmail.com">codeappli09@gmail.com</a> · Académie de Versailles</p>
+</footer>
+
+<script>
+  function setBilling(period) {
+    // Toggle labels
+    document.getElementById('btn-monthly').classList.toggle('active', period === 'monthly');
+    document.getElementById('btn-yearly').classList.toggle('active',  period === 'yearly');
+
+    // Afficher le bon plan
+    document.querySelectorAll('.plan[data-period]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.period === period);
+    });
+  }
+</script>
+
+</body>
+</html>

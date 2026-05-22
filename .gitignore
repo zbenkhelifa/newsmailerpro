@@ -1,0 +1,24 @@
+# Licences et config sensibles
+*.licence
+config.json
+.env
+.env.*
+
+# Claude Code
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+dist/
+build/
+*.egg-info/
+
+# Node / Firebase
+node_modules/
+.firebase/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
