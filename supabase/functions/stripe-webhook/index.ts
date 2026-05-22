@@ -83,11 +83,24 @@ async function envoyerEmailLicence(opts: {
               </tr>
             </table>
 
+            <!-- Bouton téléchargement -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+              <tr>
+                <td style="text-align:center;padding:8px 0;">
+                  <a href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/MailSenderPro.zip"
+                     style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;
+                            font-size:15px;font-weight:700;padding:14px 28px;border-radius:8px;">
+                    ⬇️ Télécharger MailSender Pro
+                  </a>
+                </td>
+              </tr>
+            </table>
+
             <!-- Étapes -->
             <p style="margin:0 0 12px;font-size:13px;color:#888;text-transform:uppercase;
                       letter-spacing:1px;font-weight:600;">Comment activer</p>
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
-              ${["Téléchargez et lancez MailSender Pro",
+              ${["Téléchargez et lancez MailSender Pro (lien ci-dessus)",
                  "Une fenêtre d'activation s'affiche au premier lancement",
                  "Saisissez votre clé et cliquez sur Activer"].map((step, i) => `
               <tr>
