@@ -1,4 +1,4 @@
-name: Build & Release NewsMailerPro.exe
+name: Build & Release NewsMailerPro
 
 on:
   workflow_dispatch:
@@ -10,7 +10,20 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: Windows
+            zip_name: NewsMailerPro-Windows.zip
+          - os: macos-latest
+            platform: Mac
+            zip_name: NewsMailerPro-Mac.zip
+          - os: ubuntu-latest
+            platform: Linux
+            zip_name: NewsMailerPro-Linux.zip
+
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: write
 
@@ -18,27 +31,53 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Setup Python (Windows / Mac)
+        if: matrix.platform != 'Linux'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      - name: Dépendances système (Linux)
+        if: matrix.platform == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip python3-tk
+
       - name: Installer PyInstaller
         run: pip install pyinstaller
+        shell: bash
 
-      - name: Compiler NewsMailerPro.exe
-        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --clean newsmailerpro.py
+      - name: Compiler (Windows)
+        if: matrix.platform == 'Windows'
+        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
 
-      - name: Créer le zip
+      - name: Compiler (Mac)
+        if: matrix.platform == 'Mac'
+        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
+
+      - name: Compiler (Linux)
+        if: matrix.platform == 'Linux'
+        run: python3 -m PyInstaller --onefile --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
+
+      - name: Créer le zip (Windows)
+        if: matrix.platform == 'Windows'
+        shell: pwsh
         run: |
-          mkdir release_tmp
-          copy dist\NewsMailerPro.exe release_tmp\NewsMailerPro.exe
-          xcopy data release_tmp\data\ /E /I
-          powershell Compress-Archive -Path release_tmp\* -DestinationPath NewsMailerPro.zip
-        shell: cmd
+          New-Item -ItemType Directory -Force -Path release_tmp
+          Copy-Item dist\NewsMailerPro.exe release_tmp\
+          Copy-Item -Recurse data release_tmp\data
+          Compress-Archive -Path release_tmp\* -DestinationPath ${{ matrix.zip_name }}
+
+      - name: Créer le zip (Mac / Linux)
+        if: matrix.platform != 'Windows'
+        run: |
+          mkdir -p release_tmp
+          cp dist/NewsMailerPro release_tmp/
+          cp -r data release_tmp/data
+          cd release_tmp && zip -r ../${{ matrix.zip_name }} .
 
       - name: Upload dans la Release GitHub
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          files: NewsMailerPro.zip
+          files: ${{ matrix.zip_name }}

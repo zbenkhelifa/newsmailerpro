@@ -21,7 +21,7 @@
       background: #fff;
       border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0,0,0,.08);
-      max-width: 520px;
+      max-width: 540px;
       width: 100%;
       overflow: hidden;
     }
@@ -41,9 +41,9 @@
     .card-header h1 { color: #fff; font-size: 1.4rem; font-weight: 700; }
     .card-header p  { color: #93c5fd; font-size: 0.9rem; margin-top: 6px; }
 
-    .card-body { padding: 36px 40px; }
+    .card-body { padding: 32px 40px; }
 
-    .step-list { list-style: none; margin-bottom: 32px; }
+    .step-list { list-style: none; margin-bottom: 28px; }
     .step-list li {
       display: flex;
       align-items: flex-start;
@@ -66,6 +66,42 @@
       margin-top: 1px;
     }
 
+    /* OS selector */
+    .os-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .os-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .os-tab {
+      flex: 1;
+      padding: 10px 6px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+      transition: all .2s;
+      user-select: none;
+    }
+    .os-tab:hover { border-color: #94a3b8; color: #334155; }
+    .os-tab.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1e40af;
+    }
+    .os-tab .icon { display: block; font-size: 1.4rem; margin-bottom: 4px; }
+
     .btn-download {
       display: flex;
       align-items: center;
@@ -76,13 +112,20 @@
       text-decoration: none;
       font-size: 1rem;
       font-weight: 700;
-      padding: 16px;
+      padding: 15px;
       border-radius: 10px;
       transition: opacity .2s, transform .2s;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .btn-download:hover { opacity: .88; transform: translateY(-1px); }
-    .btn-download svg { flex-shrink: 0; }
+
+    .os-note {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-align: center;
+      margin-bottom: 20px;
+      min-height: 18px;
+    }
 
     .note {
       text-align: center;
@@ -101,6 +144,10 @@
       color: #94a3b8;
     }
     .card-footer a { color: #2563eb; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .card-body, .card-header { padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -116,11 +163,11 @@
     <ul class="step-list">
       <li>
         <div class="step-num">1</div>
-        <div><strong>Vérifiez votre boîte mail</strong> — Votre clé de licence vous a été envoyée automatiquement (vérifiez les spams si besoin).</div>
+        <div><strong>Vérifiez votre boîte mail</strong> — Votre clé de licence vous a été envoyée (vérifiez les spams si besoin).</div>
       </li>
       <li>
         <div class="step-num">2</div>
-        <div><strong>Téléchargez l'application</strong> — Cliquez sur le bouton ci-dessous pour obtenir la dernière version.</div>
+        <div><strong>Choisissez votre système</strong> et téléchargez l'application ci-dessous.</div>
       </li>
       <li>
         <div class="step-num">3</div>
@@ -128,17 +175,26 @@
       </li>
     </ul>
 
-    <a class="btn-download"
-       href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/NewsMailerPro.zip">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2v10m0 0l-3-3m3 3l3-3M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2"
-              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Télécharger NewsMailer Pro (.zip)
+    <!-- Sélecteur OS -->
+    <p class="os-label">Votre système</p>
+    <div class="os-tabs">
+      <div class="os-tab" id="tab-windows" onclick="selectOS('windows')">
+        <span class="icon">🪟</span>Windows
+      </div>
+      <div class="os-tab" id="tab-mac" onclick="selectOS('mac')">
+        <span class="icon"></span>Mac
+      </div>
+      <div class="os-tab" id="tab-linux" onclick="selectOS('linux')">
+        <span class="icon">🐧</span>Linux
+      </div>
+    </div>
+
+    <a class="btn-download" id="btn-download" href="#">
+      ⬇️ <span id="btn-label">Télécharger NewsMailer Pro</span>
     </a>
+    <p class="os-note" id="os-note"></p>
 
     <p class="note">
-      Windows uniquement · Version 1.0<br>
       Besoin d'aide ? <a href="mailto:codeappli09@gmail.com">codeappli09@gmail.com</a>
     </p>
   </div>
@@ -147,6 +203,45 @@
     <a href="https://newsmailerpro.web.app">← Retour au site</a>
   </div>
 </div>
+
+<script>
+  const BASE = "https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/";
+  const configs = {
+    windows: {
+      file:  "NewsMailerPro-Windows.zip",
+      label: "Télécharger pour Windows (.zip)",
+      note:  "Windows 10 ou supérieur · Extraire et lancer NewsMailerPro.exe",
+    },
+    mac: {
+      file:  "NewsMailerPro-Mac.zip",
+      label: "Télécharger pour Mac (.zip)",
+      note:  "macOS 12 ou supérieur · Extraire et lancer NewsMailerPro",
+    },
+    linux: {
+      file:  "NewsMailerPro-Linux.zip",
+      label: "Télécharger pour Linux (.zip)",
+      note:  "Ubuntu / Debian · Extraire, rendre exécutable et lancer",
+    },
+  };
+
+  function selectOS(os) {
+    document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + os).classList.add('active');
+    const c = configs[os];
+    document.getElementById('btn-download').href  = BASE + c.file;
+    document.getElementById('btn-label').textContent = c.label;
+    document.getElementById('os-note').textContent   = c.note;
+  }
+
+  function detectOS() {
+    const ua = navigator.userAgent;
+    if (/Windows/i.test(ua))  return 'windows';
+    if (/Mac|iPhone|iPad/i.test(ua)) return 'mac';
+    return 'linux';
+  }
+
+  selectOS(detectOS());
+</script>
 
 </body>
 </html>

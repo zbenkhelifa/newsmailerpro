@@ -440,12 +440,49 @@
     </div>
     <div class="faq-item">
       <h4>L'application fonctionne-t-elle sur Mac ou Linux ?</h4>
-      <p>La version actuelle est disponible uniquement pour Windows. Une version Mac est prévue prochainement.</p>
+      <p>Oui — des versions natives sont disponibles pour Windows, Mac (macOS 12+) et Linux (Ubuntu/Debian).</p>
     </div>
     <div class="faq-item">
       <h4>Comment obtenir ma clé de licence après le paiement ?</h4>
       <p>Elle vous est envoyée automatiquement par email dès confirmation du paiement. Vérifiez vos spams si vous ne la recevez pas dans les 5 minutes.</p>
     </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download" style="padding:80px 24px;background:#fff;text-align:center;">
+  <h2 class="section-title">Télécharger NewsMailer Pro</h2>
+  <p style="color:var(--gray);max-width:460px;margin:0 auto 40px;">Disponible sur Windows, Mac et Linux. Une clé de licence est requise au premier lancement.</p>
+
+  <div style="max-width:460px;margin:0 auto;">
+    <p style="font-size:.8rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Votre système</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div class="dl-tab active" id="dl-windows" onclick="selectDL('windows')"
+           style="flex:1;padding:12px 6px;border:2px solid #2563eb;border-radius:8px;background:#eff6ff;cursor:pointer;text-align:center;font-size:.85rem;font-weight:600;color:#1e40af;transition:all .2s;">
+        <div style="font-size:1.4rem;">🪟</div>Windows
+      </div>
+      <div class="dl-tab" id="dl-mac" onclick="selectDL('mac')"
+           style="flex:1;padding:12px 6px;border:2px solid #e2e8f0;border-radius:8px;background:#f8fafc;cursor:pointer;text-align:center;font-size:.85rem;font-weight:600;color:#64748b;transition:all .2s;">
+        <div style="font-size:1.4rem;"></div>Mac
+      </div>
+      <div class="dl-tab" id="dl-linux" onclick="selectDL('linux')"
+           style="flex:1;padding:12px 6px;border:2px solid #e2e8f0;border-radius:8px;background:#f8fafc;cursor:pointer;text-align:center;font-size:.85rem;font-weight:600;color:#64748b;transition:all .2s;">
+        <div style="font-size:1.4rem;">🐧</div>Linux
+      </div>
+    </div>
+
+    <a id="dl-btn" href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/NewsMailerPro-Windows.zip"
+       style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--blue);color:#fff;
+              text-decoration:none;font-size:1rem;font-weight:700;padding:15px;border-radius:10px;
+              transition:opacity .2s,transform .2s;margin-bottom:10px;">
+      ⬇️ <span id="dl-label">Télécharger pour Windows (.zip)</span>
+    </a>
+    <p id="dl-note" style="font-size:.8rem;color:var(--gray);">Windows 10 ou supérieur · Extraire et lancer NewsMailerPro.exe</p>
+
+    <p style="margin-top:20px;font-size:.82rem;color:#94a3b8;">
+      Une clé de licence est envoyée par email après abonnement.
+      <a href="#pricing" style="color:var(--blue);text-decoration:none;">Voir les tarifs →</a>
+    </p>
   </div>
 </section>
 
@@ -455,6 +492,31 @@
 </footer>
 
 <script>
+  const DL_BASE = "https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/";
+  const DL_CFG = {
+    windows: { file: "NewsMailerPro-Windows.zip", label: "Télécharger pour Windows (.zip)", note: "Windows 10 ou supérieur · Extraire et lancer NewsMailerPro.exe" },
+    mac:     { file: "NewsMailerPro-Mac.zip",     label: "Télécharger pour Mac (.zip)",     note: "macOS 12 ou supérieur · Extraire et lancer NewsMailerPro" },
+    linux:   { file: "NewsMailerPro-Linux.zip",   label: "Télécharger pour Linux (.zip)",   note: "Ubuntu / Debian · Extraire, rendre exécutable et lancer" },
+  };
+  function selectDL(os) {
+    document.querySelectorAll('.dl-tab').forEach(t => {
+      t.style.borderColor = '#e2e8f0';
+      t.style.background  = '#f8fafc';
+      t.style.color       = '#64748b';
+    });
+    const tab = document.getElementById('dl-' + os);
+    tab.style.borderColor = '#2563eb';
+    tab.style.background  = '#eff6ff';
+    tab.style.color       = '#1e40af';
+    document.getElementById('dl-btn').href            = DL_BASE + DL_CFG[os].file;
+    document.getElementById('dl-label').textContent   = DL_CFG[os].label;
+    document.getElementById('dl-note').textContent    = DL_CFG[os].note;
+  }
+  (function() {
+    const ua = navigator.userAgent;
+    selectDL(/Windows/i.test(ua) ? 'windows' : /Mac|iPhone|iPad/i.test(ua) ? 'mac' : 'linux');
+  })();
+
   function setBilling(period) {
     // Toggle labels
     document.getElementById('btn-monthly').classList.toggle('active', period === 'monthly');

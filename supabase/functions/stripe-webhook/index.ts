@@ -83,17 +83,25 @@ async function envoyerEmailLicence(opts: {
               </tr>
             </table>
 
-            <!-- Bouton téléchargement -->
+            <!-- Boutons téléchargement -->
+            <p style="margin:0 0 10px;font-size:13px;color:#888;text-transform:uppercase;
+                      letter-spacing:1px;font-weight:600;">Télécharger l'application</p>
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+              ${[
+                { os: "🪟 Windows", file: "NewsMailerPro-Windows.zip" },
+                { os: " Mac",     file: "NewsMailerPro-Mac.zip" },
+                { os: "🐧 Linux",   file: "NewsMailerPro-Linux.zip" },
+              ].map(({ os, file }) => `
               <tr>
-                <td style="text-align:center;padding:8px 0;">
-                  <a href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/NewsMailerPro.zip"
-                     style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;
-                            font-size:15px;font-weight:700;padding:14px 28px;border-radius:8px;">
-                    ⬇️ Télécharger NewsMailer Pro
+                <td style="padding:4px 0;">
+                  <a href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/${file}"
+                     style="display:block;background:#f0f4f8;color:#1e3a5f;text-decoration:none;
+                            font-size:14px;font-weight:600;padding:10px 16px;border-radius:6px;
+                            border:1px solid #d1dce8;">
+                    ⬇️ ${os}
                   </a>
                 </td>
-              </tr>
+              </tr>`).join("")}
             </table>
 
             <!-- Étapes -->
