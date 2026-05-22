@@ -75,9 +75,9 @@ BREVO_SENDER_NAME
 ## Commandes fréquentes
 
 ```bash
-# Déployer les Edge Functions
-supabase functions deploy verifier-licence
-supabase functions deploy stripe-webhook
+# Déployer les Edge Functions (--no-verify-jwt obligatoire : Stripe et l'app n'envoient pas de JWT)
+supabase functions deploy verifier-licence --project-ref tcexvmzfesnbhfjcgrnz --no-verify-jwt
+supabase functions deploy stripe-webhook --project-ref tcexvmzfesnbhfjcgrnz --no-verify-jwt
 
 # Tester les webhooks en local
 stripe listen --forward-to https://PROJET.supabase.co/functions/v1/stripe-webhook
