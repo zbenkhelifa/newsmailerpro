@@ -1,0 +1,42 @@
+name: Build & Release NewsMailerPro.exe
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag de release (ex: v1.0)"
+        required: true
+        default: "v1.0"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer PyInstaller
+        run: pip install pyinstaller
+
+      - name: Compiler NewsMailerPro.exe
+        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --clean newsmailerpro.py
+
+      - name: Créer le zip
+        run: |
+          mkdir release_tmp
+          copy dist\NewsMailerPro.exe release_tmp\NewsMailerPro.exe
+          xcopy data release_tmp\data\ /E /I
+          powershell Compress-Archive -Path release_tmp\* -DestinationPath NewsMailerPro.zip
+        shell: cmd
+
+      - name: Upload dans la Release GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          files: NewsMailerPro.zip
