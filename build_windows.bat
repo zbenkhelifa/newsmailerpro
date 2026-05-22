@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul
-title Compilation EnvoiIdentifiants.exe
+title Compilation NewsMailerPro.exe
 
 echo.
 echo ╔══════════════════════════════════════════════╗
-echo ║   Compilation de EnvoiIdentifiants.exe       ║
+echo ║   Compilation de NewsMailerPro.exe           ║
 echo ╚══════════════════════════════════════════════╝
 echo.
 
@@ -39,7 +39,7 @@ REM ── Compiler ────────────────────
 echo 🔨 Compilation en cours, merci de patienter...
 echo.
 
-pyinstaller --onefile --windowed --name "EnvoiIdentifiants" --clean envoi_identifiants.py
+pyinstaller --onefile --windowed --name "NewsMailerPro" --clean newsmailerpro.py
 
 if errorlevel 1 (
     echo.
@@ -49,7 +49,7 @@ if errorlevel 1 (
 )
 
 REM ── Copier le .exe à la racine ─────────────────────────────────────────────
-copy /Y "dist\EnvoiIdentifiants.exe" "EnvoiIdentifiants.exe" >nul
+copy /Y "dist\NewsMailerPro.exe" "NewsMailerPro.exe" >nul
 
 REM ── Nettoyage ──────────────────────────────────────────────────────────────
 rmdir /S /Q build >nul 2>&1
@@ -60,7 +60,7 @@ echo.
 echo ╔══════════════════════════════════════════════╗
 echo ║   ✅ Compilation réussie !                   ║
 echo ║                                              ║
-echo ║   → EnvoiIdentifiants.exe créé              ║
+echo ║   → NewsMailerPro.exe créé                  ║
 echo ║                                              ║
 echo ║   Placez le .exe à côté du dossier data/    ║
 echo ║   et double-cliquez pour lancer.             ║

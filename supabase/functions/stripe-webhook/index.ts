@@ -42,11 +42,11 @@ async function envoyerEmailLicence(opts: {
 
   const body = {
     sender: {
-      name:  Deno.env.get("BREVO_SENDER_NAME") || "MailSender Pro",
+      name:  Deno.env.get("BREVO_SENDER_NAME") || "NewsMailer Pro",
       email: Deno.env.get("BREVO_SENDER_EMAIL")!,
     },
     to: [{ email: opts.destinataire_email, name: opts.destinataire_nom }],
-    subject: "🔑 Votre licence MailSender Pro",
+    subject: "🔑 Votre licence NewsMailer Pro",
     htmlContent: `<!DOCTYPE html>
 <html lang="fr">
 <head><meta charset="UTF-8"></head>
@@ -57,7 +57,7 @@ async function envoyerEmailLicence(opts: {
              style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
         <tr>
           <td style="background:#1e3a5f;padding:28px 40px;text-align:center;">
-            <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700;">MailSender Pro</h1>
+            <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700;">NewsMailer Pro</h1>
             <p style="margin:4px 0 0;color:#a8c4e0;font-size:13px;">Votre licence est prête</p>
           </td>
         </tr>
@@ -87,10 +87,10 @@ async function envoyerEmailLicence(opts: {
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
               <tr>
                 <td style="text-align:center;padding:8px 0;">
-                  <a href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/MailSenderPro.zip"
+                  <a href="https://github.com/zbenkhelifa/newsmailerpro/releases/latest/download/NewsMailerPro.zip"
                      style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;
                             font-size:15px;font-weight:700;padding:14px 28px;border-radius:8px;">
-                    ⬇️ Télécharger MailSender Pro
+                    ⬇️ Télécharger NewsMailer Pro
                   </a>
                 </td>
               </tr>
@@ -100,7 +100,7 @@ async function envoyerEmailLicence(opts: {
             <p style="margin:0 0 12px;font-size:13px;color:#888;text-transform:uppercase;
                       letter-spacing:1px;font-weight:600;">Comment activer</p>
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
-              ${["Téléchargez et lancez MailSender Pro (lien ci-dessus)",
+              ${["Téléchargez et lancez NewsMailer Pro (lien ci-dessus)",
                  "Une fenêtre d'activation s'affiche au premier lancement",
                  "Saisissez votre clé et cliquez sur Activer"].map((step, i) => `
               <tr>
@@ -121,7 +121,7 @@ async function envoyerEmailLicence(opts: {
         <tr>
           <td style="background:#f0f4f8;padding:16px 40px;text-align:center;border-top:1px solid #e8ecf0;">
             <p style="margin:0;font-size:11px;color:#bbb;">
-              MailSender Pro — Abonnement annuel — Renouvellement automatique via Stripe
+              NewsMailer Pro — Abonnement annuel — Renouvellement automatique via Stripe
             </p>
           </td>
         </tr>
@@ -160,11 +160,11 @@ async function envoyerEmailRenouvellement(opts: {
 
   const body = {
     sender: {
-      name:  Deno.env.get("BREVO_SENDER_NAME") || "MailSender Pro",
+      name:  Deno.env.get("BREVO_SENDER_NAME") || "NewsMailer Pro",
       email: Deno.env.get("BREVO_SENDER_EMAIL")!,
     },
     to: [{ email: opts.destinataire_email, name: opts.destinataire_nom }],
-    subject: "✅ Votre abonnement MailSender Pro a été renouvelé",
+    subject: "✅ Votre abonnement NewsMailer Pro a été renouvelé",
     htmlContent: `<!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f4f6f9;font-family:Arial,sans-serif;">
@@ -178,7 +178,7 @@ async function envoyerEmailRenouvellement(opts: {
         <tr><td style="padding:28px 40px;">
           <p style="color:#333;font-size:15px;">Bonjour <strong>${opts.destinataire_nom}</strong>,</p>
           <p style="color:#555;font-size:14px;line-height:1.7;">
-            Votre abonnement MailSender Pro a été renouvelé avec succès.
+            Votre abonnement NewsMailer Pro a été renouvelé avec succès.
             Votre clé de licence reste la même :
           </p>
           <div style="background:#f0f4f8;border-radius:8px;padding:16px;text-align:center;margin:20px 0;">

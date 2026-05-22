@@ -1,29 +1,43 @@
-# 📧 Envoi Identifiants Élèves
+# NewsMailer Pro
 
-Application Python pour envoyer les identifiants de connexion aux élèves par email.
+Application Python (tkinter) pour envoyer les identifiants de connexion aux élèves par email.
 
-## 📁 Structure
+## Structure
 
 ```
-envoi_identifiants/
-├── envoi_identifiants.py   ← Application principale
-├── config.json             ← Créé automatiquement après la 1ère sauvegarde
-├── README.md
-└── data/
-    └── eleves_exemple.csv  ← Modèle de fichier CSV
+newsmailerpro/
+├── newsmailerpro.py        ← Application principale
+├── build_windows.bat       ← Génère NewsMailerPro.exe
+├── data/
+│   └── eleves_exemple.csv  ← Modèle de fichier CSV
+└── supabase/
+    ├── functions/
+    │   ├── verifier-licence/   ← Vérifie la clé au démarrage
+    │   └── stripe-webhook/     ← Reçoit les paiements Stripe
+    └── generer_licence.py      ← Gestion manuelle des licences
 ```
 
-## 🚀 Lancement
+## Lancement (développement)
 
 ```bash
-python envoi_identifiants.py
+python newsmailerpro.py
 ```
 
 Python 3.8+ requis. Aucune bibliothèque externe nécessaire (stdlib uniquement).
 
-## 📄 Format du fichier CSV
+## Compilation Windows
 
-Le fichier CSV doit être placé dans le dossier `data/` et contenir ces colonnes :
+```bat
+build_windows.bat
+```
+
+Génère `NewsMailerPro.exe` — à uploader dans la GitHub Release v1.0 :
+
+```bash
+gh release upload v1.0 NewsMailerPro.zip --repo zbenkhelifa/newsmailerpro
+```
+
+## Format du fichier CSV
 
 ```
 nom,prenom,email,mot_de_passe
@@ -31,45 +45,14 @@ Dupont,Marie,marie.dupont@lycee.fr,Xk9#mP2q
 Martin,Lucas,lucas.martin@lycee.fr,Ht7$nR4w
 ```
 
-**Encodage :** UTF-8 (avec ou sans BOM)  
-**Séparateur :** virgule
+**Encodage :** UTF-8 · **Séparateur :** virgule
 
-## ⚙️ Configuration SMTP
+## Configuration SMTP
 
-### monlycee.net (Académie de Versailles)
-- Hôte : `smtp.monlycee.net`
-- Port : `587`
-- TLS : ✅ activé
-- Utilisateur : votre adresse @monlycee.net
-- Mot de passe : votre mot de passe ENT
+| Serveur | Hôte | Port |
+|---|---|---|
+| monlycee.net | `smtp.monlycee.net` | 587 |
+| Gmail | `smtp.gmail.com` | 587 |
+| Brevo | `smtp-relay.brevo.com` | 587 |
 
-### Gmail
-- Hôte : `smtp.gmail.com`
-- Port : `587`
-- TLS : ✅ activé
-- Utilisateur : votre adresse Gmail
-- Mot de passe : mot de passe d'application (pas le mot de passe principal)
-
-### Brevo (anciennement Sendinblue)
-- Hôte : `smtp-relay.brevo.com`
-- Port : `587`
-- TLS : ✅ activé
-- Utilisateur : votre email Brevo
-- Mot de passe : clé API SMTP Brevo
-
-## ⏱️ Délai anti-spam
-
-Régler à **3–5 secondes** entre chaque envoi pour éviter d'être bloqué comme spam.  
-Pour 1 500 élèves à 3 s/email → environ **75 minutes**.  
-Lancer de préférence la veille ou tôt le matin.
-
-## 📝 Variables du template
-
-Dans le corps du message, utilisez :
-
-| Variable | Remplacée par |
-|---|---|
-| `{prenom}` | Prénom de l'élève |
-| `{nom}` | Nom de l'élève |
-| `{email}` | Adresse email |
-| `{mot_de_passe}` | Mot de passe |
+Délai anti-spam recommandé : **3–5 secondes** entre chaque envoi.

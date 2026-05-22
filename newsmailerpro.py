@@ -235,7 +235,7 @@ class FenetreActivation(tk.Toplevel):
         self._btn_activer.pack(pady=12)
 
         tk.Label(self,
-                 text="Pour obtenir une licence : contact@votre-site.fr",
+                 text="Pour obtenir une licence : codeappli09@gmail.com",
                  bg="#f0f4f8", fg="#aaa", font=("Helvetica", 8)).pack()
 
     def _activer(self):
@@ -305,7 +305,7 @@ def verifier_au_demarrage(parent, callback_succes):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("📧 Envoi d'identifiants par email")
+        self.title("NewsMailer Pro")
         self.geometry("740x620")
         self.resizable(True, True)
         self.configure(bg="#f0f4f8")
@@ -334,7 +334,7 @@ class App(tk.Tk):
     def _build_ui(self):
         header = tk.Frame(self, bg="#1e3a5f", pady=10)
         header.pack(fill="x")
-        tk.Label(header, text="📧 Envoi d'identifiants par email",
+        tk.Label(header, text="NewsMailer Pro",
                  bg="#1e3a5f", fg="white", font=("Helvetica", 15, "bold")).pack()
 
         style = ttk.Style()
