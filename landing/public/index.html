@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NewsMailer Pro — Envoyez les identifiants de vos élèves en un clic</title>
-  <meta name="description" content="Application bureau pour enseignants : envoyez les identifiants de toute une classe par email en quelques secondes.">
+  <title>NewsMailer Pro — Envoi de mails personnalisés en masse</title>
+  <meta name="description" content="Application bureau : importez un CSV, rédigez votre message avec des variables {colonne}, joignez des PDF par destinataire et envoyez en un clic.">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -296,9 +296,9 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="badge">Pour les enseignants</div>
-  <h1>Envoyez les identifiants de vos élèves <em>en un clic</em></h1>
-  <p>Importez votre fichier CSV, et NewsMailer Pro envoie automatiquement les identifiants à chaque élève — ou à ses parents.</p>
+  <div class="badge">Envoi de mails en masse</div>
+  <h1>Des mails personnalisés pour chaque destinataire, <em>en un clic</em></h1>
+  <p>Importez votre CSV, rédigez votre message avec <strong style="color:#93c5fd">{variables}</strong>, joignez un PDF par destinataire — NewsMailer Pro envoie un mail unique à chacun.</p>
   <a class="hero-cta" href="#pricing">Commencer dès maintenant</a>
   <p class="hero-note">Dès 2,99 € / mois · Sans engagement · Annulez à tout moment</p>
 </section>
@@ -309,33 +309,38 @@
   <div class="grid">
     <div class="card">
       <div class="card-icon">📂</div>
-      <h3>Import CSV en un clic</h3>
-      <p>Chargez l'export de votre logiciel de gestion (Pronote, ScoDoc…) et la liste est prête en quelques secondes.</p>
+      <h3>Import CSV universel</h3>
+      <p>Importez n'importe quel CSV — élèves, contacts, clients, membres. Toutes les colonnes sont automatiquement disponibles.</p>
     </div>
     <div class="card">
-      <div class="card-icon">✉️</div>
-      <h3>Envoi automatisé</h3>
-      <p>Chaque élève (ou parent) reçoit un email personnalisé avec ses propres identifiants. Aucun copier-coller.</p>
+      <div class="card-icon">✏️</div>
+      <h3>Messages avec variables</h3>
+      <p>Écrivez <code style="background:#dbeafe;padding:1px 5px;border-radius:4px;font-size:.85em">{prenom}</code>, <code style="background:#dbeafe;padding:1px 5px;border-radius:4px;font-size:.85em">{nom}</code> ou n'importe quelle colonne de votre CSV pour personnaliser chaque mail.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📎</div>
+      <h3>PDF par destinataire</h3>
+      <p>Déposez vos PDF dans un dossier (nommés <em>Prenom_Nom.pdf</em> ou <em>email.pdf</em>) — chaque destinataire reçoit son fichier en pièce jointe.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🖊️</div>
+      <h3>Éditeur texte ou HTML</h3>
+      <p>Rédigez en texte simple ou activez le mode HTML pour composer des mails entièrement sur mesure avec vos propres balises.</p>
     </div>
     <div class="card">
       <div class="card-icon">⏱️</div>
       <h3>Anti-spam intégré</h3>
-      <p>Un délai configurable entre chaque envoi évite d'être bloqué par les serveurs mail de votre établissement.</p>
+      <p>Un délai configurable entre chaque envoi évite d'être bloqué par votre serveur mail.</p>
     </div>
     <div class="card">
       <div class="card-icon">🖥️</div>
       <h3>Application bureau légère</h3>
-      <p>Zéro installation complexe, zéro dépendance. Fonctionne sur Windows, même sur les ordinateurs de l'établissement.</p>
+      <p>Zéro installation complexe, zéro dépendance. Fonctionne sur Windows, Mac et Linux.</p>
     </div>
     <div class="card">
       <div class="card-icon">🔒</div>
-      <h3>Données sur votre machine</h3>
-      <p>Aucune donnée élève n'est envoyée à un serveur externe. Tout reste sur votre ordinateur.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🎓</div>
-      <h3>Conçu par un enseignant</h3>
-      <p>Développé par un enseignant pour répondre à un vrai besoin du terrain.</p>
+      <h3>Vos données restent chez vous</h3>
+      <p>Aucune donnée n'est envoyée à un serveur externe. Votre liste et vos fichiers restent sur votre ordinateur.</p>
     </div>
   </div>
 </section>
@@ -347,7 +352,7 @@
     <div class="step">
       <div class="step-num">1</div>
       <h4>Téléchargez l'application</h4>
-      <p>Un simple fichier .exe, aucune installation requise.</p>
+      <p>Un simple fichier à extraire, aucune installation requise. Windows, Mac ou Linux.</p>
     </div>
     <div class="step">
       <div class="step-num">2</div>
@@ -356,13 +361,13 @@
     </div>
     <div class="step">
       <div class="step-num">3</div>
-      <h4>Importez votre classe</h4>
-      <p>Chargez le fichier CSV exporté depuis votre logiciel de gestion.</p>
+      <h4>Chargez votre CSV et vos PDF</h4>
+      <p>Importez votre liste de destinataires et, si besoin, votre dossier de fichiers PDF.</p>
     </div>
     <div class="step">
       <div class="step-num">4</div>
-      <h4>Lancez l'envoi</h4>
-      <p>Cliquez sur Envoyer — chaque élève reçoit ses identifiants.</p>
+      <h4>Rédigez et envoyez</h4>
+      <p>Écrivez votre message avec {variables}, cliquez sur Envoyer — chaque destinataire reçoit son mail personnalisé.</p>
     </div>
   </div>
 </section>
@@ -388,9 +393,10 @@
       <div class="plan-price"><sup>€</sup>2,99<span class="period"> / mois</span></div>
       <div class="plan-equiv">soit 35,88 € / an</div>
       <ul>
-        <li>Envoi illimité d'identifiants</li>
-        <li>Import CSV</li>
+        <li>Envoi illimité de mails personnalisés</li>
+        <li>Import CSV · variables {colonne}</li>
         <li>3 postes inclus</li>
+        <li>Éditeur texte &amp; HTML · PDF joints</li>
         <li>Mises à jour incluses</li>
         <li>Support par email</li>
       </ul>
@@ -405,9 +411,10 @@
       <div class="plan-price"><sup>€</sup>29<span class="period"> / an</span></div>
       <div class="plan-equiv">soit 2,42 € / mois — <strong style="color:var(--green)">économisez 6,88 €</strong></div>
       <ul>
-        <li>Envoi illimité d'identifiants</li>
-        <li>Import CSV</li>
+        <li>Envoi illimité de mails personnalisés</li>
+        <li>Import CSV · variables {colonne}</li>
         <li>3 postes inclus</li>
+        <li>Éditeur texte &amp; HTML · PDF joints</li>
         <li>Mises à jour incluses</li>
         <li>Support prioritaire</li>
       </ul>
@@ -427,16 +434,24 @@
       <p>Votre licence autorise jusqu'à 3 activations simultanées. Vous pouvez désactiver un poste pour en activer un autre.</p>
     </div>
     <div class="faq-item">
-      <h4>Les données de mes élèves sont-elles sécurisées ?</h4>
-      <p>Oui. NewsMailer Pro fonctionne entièrement en local. Aucun fichier élève n'est envoyé à nos serveurs.</p>
+      <h4>Comment personnaliser le contenu de chaque mail ?</h4>
+      <p>Rédigez votre message dans l'onglet Design en utilisant <code style="background:#f1f5f9;padding:1px 5px;border-radius:3px">{nomcolonne}</code> à l'endroit voulu. NewsMailer Pro remplace automatiquement ces balises par les valeurs de chaque ligne du CSV lors de l'envoi.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Puis-je joindre un PDF différent pour chaque destinataire ?</h4>
+      <p>Oui. Placez vos PDF dans un dossier en les nommant <em>Prenom_Nom.pdf</em> ou <em>email@domaine.pdf</em>. NewsMailer Pro associe automatiquement chaque fichier au bon destinataire.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Quel format de fichier CSV est accepté ?</h4>
+      <p>Tout fichier CSV avec une colonne contenant les adresses email. Vous choisissez cette colonne dans l'application — les autres colonnes deviennent automatiquement des variables <code style="background:#f1f5f9;padding:1px 5px;border-radius:3px">{variable}</code> utilisables dans votre message.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Les données de mes destinataires sont-elles sécurisées ?</h4>
+      <p>Oui. NewsMailer Pro fonctionne entièrement en local. Aucun fichier ni donnée n'est envoyé à nos serveurs.</p>
     </div>
     <div class="faq-item">
       <h4>Puis-je annuler mon abonnement ?</h4>
       <p>Oui, à tout moment depuis votre espace Stripe. Votre accès reste actif jusqu'à la fin de la période payée.</p>
-    </div>
-    <div class="faq-item">
-      <h4>Quel format de fichier CSV est accepté ?</h4>
-      <p>Le format standard avec colonnes Nom, Prénom, Email (et optionnellement Email parent, Login, Mot de passe). Un fichier exemple est fourni dans l'application.</p>
     </div>
     <div class="faq-item">
       <h4>L'application fonctionne-t-elle sur Mac ou Linux ?</h4>
