@@ -73,12 +73,15 @@ def build_html(design):
     boutons  = design.get("boutons", [])
     footer   = design.get("footer", "Cordialement")
 
-    # Message : retours à la ligne → <br>
+    # Message : HTML brut ou texte → <br>
     message_html = ""
     if message.strip():
-        lignes = message.replace("\r\n", "\n").split("\n")
-        message_html = "<p style=\"margin:0 0 24px;font-size:15px;color:#555;line-height:1.7;\">" \
-                       + "<br>".join(lignes) + "</p>"
+        if design.get("html_mode", False):
+            message_html = message
+        else:
+            lignes = message.replace("\r\n", "\n").split("\n")
+            message_html = "<p style=\"margin:0 0 24px;font-size:15px;color:#555;line-height:1.7;\">" \
+                           + "<br>".join(lignes) + "</p>"
 
     # Boutons
     boutons_html = ""
@@ -452,9 +455,19 @@ class App(tk.Tk):
                                font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_msg.pack(fill="x", padx=14, pady=6)
 
-        tk.Label(lf_msg,
+        row_hint = tk.Frame(lf_msg, bg="#f0f4f8")
+        row_hint.pack(fill="x", padx=10, pady=(6, 2))
+        self._lbl_hint = tk.Label(row_hint,
                  text="Corps du mail. Utilisez {colonne} pour insérer une valeur du CSV. Ex : Bonjour {prenom},",
-                 bg="#f0f4f8", fg="#888", font=("Helvetica", 10)).pack(anchor="w", padx=10, pady=(6, 2))
+                 bg="#f0f4f8", fg="#888", font=("Helvetica", 10), justify="left")
+        self._lbl_hint.pack(side="left")
+
+        self._html_mode_var = tk.BooleanVar(value=False)
+        tk.Checkbutton(row_hint, text="Mode HTML", variable=self._html_mode_var,
+                       bg="#f0f4f8", font=("Helvetica", 10, "bold"), fg="#1e3a5f",
+                       activebackground="#f0f4f8", cursor="hand2",
+                       command=self._toggle_html_mode).pack(side="right", padx=(8, 0))
+
         self._msg_text = scrolledtext.ScrolledText(lf_msg, height=6,
                                                     font=("Helvetica", 11), wrap="word")
         self._msg_text.pack(fill="x", padx=10, pady=(0, 4))
@@ -548,6 +561,14 @@ class App(tk.Tk):
                     w.config(text=f"Bouton {i+1} :")
                     break
 
+    def _toggle_html_mode(self):
+        if self._html_mode_var.get():
+            self._msg_text.config(font=("Courier", 11), bg="#1e1e2e", fg="#cdd6f4", wrap="none")
+            self._lbl_hint.config(text="Mode HTML actif — écrivez du HTML brut. Utilisez {colonne} comme en mode texte.")
+        else:
+            self._msg_text.config(font=("Helvetica", 11), bg="white", fg="black", wrap="word")
+            self._lbl_hint.config(text="Corps du mail. Utilisez {colonne} pour insérer une valeur du CSV. Ex : Bonjour {prenom},")
+
     def _safe_bg(self, widget, color):
         try:
             widget.config(bg=color)
@@ -576,6 +597,7 @@ class App(tk.Tk):
             "org_slogan":     self._dv["org_slogan"].get().strip(),
             "header_couleur": self._couleur_var.get().strip(),
             "message":        self._msg_text.get("1.0", "end-1c"),
+            "html_mode":      self._html_mode_var.get(),
             "boutons":        boutons,
             "footer":         self._dv["footer"].get().strip(),
         }
@@ -744,6 +766,8 @@ class App(tk.Tk):
         self._safe_bg(self._couleur_preview, couleur)
         self._msg_text.delete("1.0", "end")
         self._msg_text.insert("1.0", d.get("message", ""))
+        self._html_mode_var.set(d.get("html_mode", False))
+        self._toggle_html_mode()
         for b in d.get("boutons", []):
             self._add_bouton_row(b.get("texte", ""), b.get("url", ""), b.get("couleur", "#1e3a5f"))
 
