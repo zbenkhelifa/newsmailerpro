@@ -13,6 +13,7 @@ import urllib.request
 import urllib.error
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 from datetime import datetime
 
 # ── Fichier de config ──────────────────────────────────────────────────────────
@@ -208,35 +209,35 @@ class FenetreActivation(tk.Toplevel):
         tk.Frame(self, bg="#1e3a5f", height=6).pack(fill="x")
 
         tk.Label(self, text="🔑 Activation de l'application",
-                 bg="#f0f4f8", font=("Helvetica", 13, "bold"),
+                 bg="#f0f4f8", font=("Helvetica", 15, "bold"),
                  fg="#1e3a5f").pack(pady=(20, 4))
 
         tk.Label(self,
                  text="Saisissez votre clé de licence\n(format : ENVOI-XXXX-XXXX-XXXX)",
-                 bg="#f0f4f8", fg="#666", font=("Helvetica", 9),
+                 bg="#f0f4f8", fg="#666", font=("Helvetica", 11),
                  justify="center").pack(pady=(0, 16))
 
         self._cle_var = tk.StringVar()
         entry = tk.Entry(self, textvariable=self._cle_var,
-                         font=("Courier", 12), width=26, justify="center")
+                         font=("Courier", 14), width=26, justify="center")
         entry.pack(pady=(0, 8))
         entry.focus()
         entry.bind("<Return>", lambda e: self._activer())
 
         self._lbl_status = tk.Label(self, text="", bg="#f0f4f8",
-                                     font=("Helvetica", 9), fg="#c0392b")
+                                     font=("Helvetica", 11), fg="#c0392b")
         self._lbl_status.pack()
 
         self._btn_activer = tk.Button(self, text="Activer",
                                        bg="#1e3a5f", fg="white",
-                                       font=("Helvetica", 10, "bold"),
+                                       font=("Helvetica", 12, "bold"),
                                        relief="flat", padx=20, pady=8,
                                        cursor="hand2", command=self._activer)
         self._btn_activer.pack(pady=12)
 
         tk.Label(self,
                  text="Pour obtenir une licence : codeappli09@gmail.com",
-                 bg="#f0f4f8", fg="#aaa", font=("Helvetica", 8)).pack()
+                 bg="#f0f4f8", fg="#aaa", font=("Helvetica", 10)).pack()
 
     def _activer(self):
         cle = self._cle_var.get().strip().upper()
@@ -306,7 +307,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("NewsMailer Pro")
-        self.geometry("740x620")
+        self.geometry("860x740")
         self.resizable(True, True)
         self.configure(bg="#f0f4f8")
 
@@ -335,10 +336,10 @@ class App(tk.Tk):
         header = tk.Frame(self, bg="#1e3a5f", pady=10)
         header.pack(fill="x")
         tk.Label(header, text="NewsMailer Pro",
-                 bg="#1e3a5f", fg="white", font=("Helvetica", 15, "bold")).pack()
+                 bg="#1e3a5f", fg="white", font=("Helvetica", 17, "bold")).pack()
 
         style = ttk.Style()
-        style.configure("TNotebook.Tab", font=("Helvetica", 10, "bold"), padding=[12, 6])
+        style.configure("TNotebook.Tab", font=("Helvetica", 12, "bold"), padding=[12, 6])
 
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
@@ -365,7 +366,7 @@ class App(tk.Tk):
         pad = {"padx": 16, "pady": 6}
 
         lf_smtp = tk.LabelFrame(f, text=" Serveur SMTP ", bg="#f0f4f8",
-                                font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                                font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_smtp.pack(fill="x", padx=14, pady=(14, 6))
 
         self._smtp_vars = {}
@@ -378,20 +379,20 @@ class App(tk.Tk):
             row = tk.Frame(lf_smtp, bg="#f0f4f8")
             row.pack(fill="x", **pad)
             tk.Label(row, text=label + " :", bg="#f0f4f8", width=16,
-                     anchor="w", font=("Helvetica", 9)).pack(side="left")
+                     anchor="w", font=("Helvetica", 11)).pack(side="left")
             var = tk.StringVar()
             tk.Entry(row, textvariable=var, show="*" if secret else "",
-                     width=38, font=("Helvetica", 9)).pack(side="left", padx=(4, 0))
+                     width=38, font=("Helvetica", 11)).pack(side="left", padx=(4, 0))
             self._smtp_vars[key] = var
 
         row_tls = tk.Frame(lf_smtp, bg="#f0f4f8")
         row_tls.pack(fill="x", **pad)
         tk.Label(row_tls, text="Sécurité :", bg="#f0f4f8", width=16,
-                 anchor="w", font=("Helvetica", 9)).pack(side="left")
+                 anchor="w", font=("Helvetica", 11)).pack(side="left")
         self._tls_var = tk.BooleanVar()
         tk.Checkbutton(row_tls, text="Utiliser TLS (STARTTLS)",
                        variable=self._tls_var, bg="#f0f4f8",
-                       font=("Helvetica", 9)).pack(side="left")
+                       font=("Helvetica", 11)).pack(side="left")
 
         btn_frame = tk.Frame(f, bg="#f0f4f8")
         btn_frame.pack(fill="x", padx=14, pady=6)
@@ -399,18 +400,18 @@ class App(tk.Tk):
         self._btn(btn_frame, "🔌 Tester la connexion", self._test_smtp, "#1e3a5f").pack(side="left", padx=4)
 
         lf_delay = tk.LabelFrame(f, text=" Options d'envoi ", bg="#f0f4f8",
-                                 font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                                 font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_delay.pack(fill="x", padx=14, pady=6)
 
         row_d = tk.Frame(lf_delay, bg="#f0f4f8")
         row_d.pack(fill="x", **pad)
         tk.Label(row_d, text="Délai entre envois :", bg="#f0f4f8",
-                 font=("Helvetica", 9), width=20, anchor="w").pack(side="left")
+                 font=("Helvetica", 11), width=20, anchor="w").pack(side="left")
         self._delai_var = tk.StringVar()
         tk.Spinbox(row_d, from_=1, to=30, textvariable=self._delai_var,
-                   width=5, font=("Helvetica", 9)).pack(side="left")
+                   width=5, font=("Helvetica", 11)).pack(side="left")
         tk.Label(row_d, text="secondes  (recommandé : 3–5 s pour éviter le spam)",
-                 bg="#f0f4f8", fg="#666", font=("Helvetica", 8)).pack(side="left", padx=6)
+                 bg="#f0f4f8", fg="#666", font=("Helvetica", 10)).pack(side="left", padx=6)
 
     # ── Onglet Design ──────────────────────────────────────────────────────────
 
@@ -434,7 +435,7 @@ class App(tk.Tk):
 
         # ── Identité ──
         lf_id = tk.LabelFrame(inner, text=" Identité ", bg="#f0f4f8",
-                              font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                              font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_id.pack(fill="x", padx=14, pady=(14, 6))
 
         self._dv = {}   # design vars
@@ -446,45 +447,45 @@ class App(tk.Tk):
             row = tk.Frame(lf_id, bg="#f0f4f8")
             row.pack(fill="x", **pad)
             tk.Label(row, text=label, bg="#f0f4f8", width=20,
-                     anchor="w", font=("Helvetica", 9)).pack(side="left")
+                     anchor="w", font=("Helvetica", 11)).pack(side="left")
             var = tk.StringVar()
             tk.Entry(row, textvariable=var, width=w,
-                     font=("Helvetica", 9)).pack(side="left")
+                     font=("Helvetica", 11)).pack(side="left")
             self._dv[key] = var
 
         # Couleur header
         row_c = tk.Frame(lf_id, bg="#f0f4f8")
         row_c.pack(fill="x", **pad)
         tk.Label(row_c, text="Couleur header :", bg="#f0f4f8", width=20,
-                 anchor="w", font=("Helvetica", 9)).pack(side="left")
+                 anchor="w", font=("Helvetica", 11)).pack(side="left")
         self._couleur_var = tk.StringVar(value="#1e3a5f")
         self._couleur_preview = tk.Label(row_c, text="  ", bg="#1e3a5f",
                                          width=4, relief="solid", cursor="hand2")
         self._couleur_preview.pack(side="left", padx=(0, 6))
         tk.Entry(row_c, textvariable=self._couleur_var, width=10,
-                 font=("Helvetica", 9)).pack(side="left", padx=(0, 6))
+                 font=("Helvetica", 11)).pack(side="left", padx=(0, 6))
         self._btn(row_c, "🎨 Choisir", self._pick_color, "#555").pack(side="left")
         self._couleur_var.trace_add("write", lambda *_: self._update_color_preview())
 
         # ── Message ──
         lf_msg = tk.LabelFrame(inner, text=" Message ", bg="#f0f4f8",
-                               font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                               font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_msg.pack(fill="x", padx=14, pady=6)
 
         tk.Label(lf_msg,
                  text="Texte libre affiché avant le bloc identifiants. Retour à la ligne = nouvelle ligne.",
-                 bg="#f0f4f8", fg="#888", font=("Helvetica", 8)).pack(anchor="w", padx=10, pady=(6, 2))
+                 bg="#f0f4f8", fg="#888", font=("Helvetica", 10)).pack(anchor="w", padx=10, pady=(6, 2))
         self._msg_text = scrolledtext.ScrolledText(lf_msg, height=5,
-                                                    font=("Helvetica", 9), wrap="word")
+                                                    font=("Helvetica", 11), wrap="word")
         self._msg_text.pack(fill="x", padx=10, pady=(0, 8))
 
         # ── Boutons ──
         lf_btn = tk.LabelFrame(inner, text=" Boutons ", bg="#f0f4f8",
-                               font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                               font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_btn.pack(fill="x", padx=14, pady=6)
 
         tk.Label(lf_btn, text="Ajoutez jusqu'à 4 boutons (liens) dans le mail.",
-                 bg="#f0f4f8", fg="#888", font=("Helvetica", 8)).pack(anchor="w", padx=10, pady=(6, 4))
+                 bg="#f0f4f8", fg="#888", font=("Helvetica", 10)).pack(anchor="w", padx=10, pady=(6, 4))
 
         self._btn_frame_list = tk.Frame(lf_btn, bg="#f0f4f8")
         self._btn_frame_list.pack(fill="x", padx=10, pady=(0, 4))
@@ -494,16 +495,16 @@ class App(tk.Tk):
 
         # ── Footer ──
         lf_foot = tk.LabelFrame(inner, text=" Pied de mail ", bg="#f0f4f8",
-                                font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                                font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_foot.pack(fill="x", padx=14, pady=6)
 
         row_f = tk.Frame(lf_foot, bg="#f0f4f8")
         row_f.pack(fill="x", **pad)
         tk.Label(row_f, text="Texte footer :", bg="#f0f4f8", width=20,
-                 anchor="w", font=("Helvetica", 9)).pack(side="left")
+                 anchor="w", font=("Helvetica", 11)).pack(side="left")
         var = tk.StringVar()
         tk.Entry(row_f, textvariable=var, width=36,
-                 font=("Helvetica", 9)).pack(side="left")
+                 font=("Helvetica", 11)).pack(side="left")
         self._dv["footer"] = var
 
         # Bouton aperçu
@@ -522,16 +523,16 @@ class App(tk.Tk):
         row.pack(fill="x")
 
         tk.Label(row, text=f"Bouton {idx+1} :", bg="#f0f4f8",
-                 font=("Helvetica", 9), width=9, anchor="w").pack(side="left")
+                 font=("Helvetica", 11), width=9, anchor="w").pack(side="left")
 
         var_texte  = tk.StringVar(value=texte)
         var_url    = tk.StringVar(value=url)
         var_couleur= tk.StringVar(value=couleur)
 
         tk.Entry(row, textvariable=var_texte, width=16,
-                 font=("Helvetica", 9)).pack(side="left", padx=2)
+                 font=("Helvetica", 11)).pack(side="left", padx=2)
         tk.Entry(row, textvariable=var_url, width=22,
-                 font=("Helvetica", 9)).pack(side="left", padx=2)
+                 font=("Helvetica", 11)).pack(side="left", padx=2)
 
         preview = tk.Label(row, text="  ", bg=couleur, width=3,
                            relief="solid", cursor="hand2")
@@ -617,45 +618,64 @@ class App(tk.Tk):
         pad = {"padx": 14, "pady": 5}
 
         lf_csv = tk.LabelFrame(f, text=" Fichier destinataires (CSV) ", bg="#f0f4f8",
-                               font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                               font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_csv.pack(fill="x", padx=14, pady=(14, 6))
 
         row_csv = tk.Frame(lf_csv, bg="#f0f4f8")
         row_csv.pack(fill="x", **pad)
         self._csv_var = tk.StringVar()
         tk.Entry(row_csv, textvariable=self._csv_var, width=42,
-                 font=("Helvetica", 9), state="readonly").pack(side="left")
+                 font=("Helvetica", 11), state="readonly").pack(side="left")
         self._btn(row_csv, "📂 Parcourir", self._browse_csv, "#555").pack(side="left", padx=6)
         self._lbl_count = tk.Label(lf_csv, text="", bg="#f0f4f8",
-                                   font=("Helvetica", 9), fg="#2d7a4f")
+                                   font=("Helvetica", 11), fg="#2d7a4f")
         self._lbl_count.pack(anchor="w", padx=14, pady=(0, 6))
 
         lf_msg = tk.LabelFrame(f, text=" Objet du mail ", bg="#f0f4f8",
-                               font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                               font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_msg.pack(fill="x", padx=14, pady=6)
 
         row_obj = tk.Frame(lf_msg, bg="#f0f4f8")
         row_obj.pack(fill="x", padx=10, pady=8)
         tk.Label(row_obj, text="Objet :", bg="#f0f4f8",
-                 font=("Helvetica", 9), width=8, anchor="w").pack(side="left")
+                 font=("Helvetica", 11), width=8, anchor="w").pack(side="left")
         self._objet_var = tk.StringVar()
         tk.Entry(row_obj, textvariable=self._objet_var, width=48,
-                 font=("Helvetica", 9)).pack(side="left")
+                 font=("Helvetica", 11)).pack(side="left")
+
+        # Fichiers PDF
+        lf_pdf = tk.LabelFrame(f, text=" Fichiers PDF à joindre (optionnel) ", bg="#f0f4f8",
+                               font=("Helvetica", 12, "bold"), fg="#1e3a5f")
+        lf_pdf.pack(fill="x", padx=14, pady=6)
+
+        tk.Label(lf_pdf,
+                 text="Nommez les PDF : Prenom_Nom.pdf, Nom_Prenom.pdf ou email.pdf — correspondance automatique.",
+                 bg="#f0f4f8", fg="#888", font=("Helvetica", 10)).pack(anchor="w", padx=14, pady=(6, 2))
+
+        row_pdf = tk.Frame(lf_pdf, bg="#f0f4f8")
+        row_pdf.pack(fill="x", padx=10, pady=(4, 4))
+        self._pdf_dir_var = tk.StringVar()
+        tk.Entry(row_pdf, textvariable=self._pdf_dir_var, width=42,
+                 font=("Helvetica", 11), state="readonly").pack(side="left")
+        self._btn(row_pdf, "📂 Dossier", self._browse_pdf_dir, "#555").pack(side="left", padx=6)
+        self._lbl_pdf = tk.Label(lf_pdf, text="Aucun dossier sélectionné.", bg="#f0f4f8",
+                                  font=("Helvetica", 11), fg="#aaa")
+        self._lbl_pdf.pack(anchor="w", padx=14, pady=(0, 8))
 
         # Info design
         lf_info = tk.LabelFrame(f, text=" Design utilisé ", bg="#f0f4f8",
-                                font=("Helvetica", 10, "bold"), fg="#1e3a5f")
+                                font=("Helvetica", 12, "bold"), fg="#1e3a5f")
         lf_info.pack(fill="x", padx=14, pady=6)
         tk.Label(lf_info,
                  text="Le mail sera envoyé avec le design configuré dans l'onglet 🎨 Design email.",
-                 bg="#f0f4f8", fg="#555", font=("Helvetica", 9)).pack(padx=14, pady=8, anchor="w")
+                 bg="#f0f4f8", fg="#555", font=("Helvetica", 11)).pack(padx=14, pady=8, anchor="w")
         self._btn(lf_info, "👁 Aperçu avant envoi", self._preview_html, "#555").pack(
             padx=14, pady=(0, 8), anchor="w")
 
         self._progress = ttk.Progressbar(f, mode="determinate")
         self._progress.pack(fill="x", padx=14, pady=(12, 2))
         self._lbl_progress = tk.Label(f, text="", bg="#f0f4f8",
-                                      font=("Helvetica", 9), fg="#555")
+                                      font=("Helvetica", 11), fg="#555")
         self._lbl_progress.pack()
 
         btn_row = tk.Frame(f, bg="#f0f4f8")
@@ -670,7 +690,7 @@ class App(tk.Tk):
 
     def _build_tab_log(self):
         f = self.tab_log
-        self._log_text = scrolledtext.ScrolledText(f, font=("Courier", 9),
+        self._log_text = scrolledtext.ScrolledText(f, font=("Courier", 11),
                                                     state="disabled", bg="#1a1a2e",
                                                     fg="#a8d8a8", insertbackground="white")
         self._log_text.pack(fill="both", expand=True, padx=10, pady=10)
@@ -684,7 +704,7 @@ class App(tk.Tk):
 
     def _btn(self, parent, text, cmd, bg):
         return tk.Button(parent, text=text, command=cmd, bg=bg, fg="white",
-                         font=("Helvetica", 9, "bold"), relief="flat",
+                         font=("Helvetica", 11, "bold"), relief="flat",
                          padx=10, pady=5, cursor="hand2",
                          activebackground=bg, activeforeground="white")
 
@@ -709,6 +729,10 @@ class App(tk.Tk):
         self._delai_var.set(self.cfg.get("delai", "3"))
         self._csv_var.set(self.cfg.get("csv_path", ""))
         self._objet_var.set(self.cfg.get("objet", "Vos identifiants de connexion"))
+        pdf_dir = self.cfg.get("pdf_dir", "")
+        self._pdf_dir_var.set(pdf_dir)
+        if pdf_dir:
+            self._update_pdf_count()
 
         d = self.cfg.get("design", DEFAULT_DESIGN)
         self._dv["org_nom"].set(d.get("org_nom", ""))
@@ -732,6 +756,7 @@ class App(tk.Tk):
         self.cfg["delai"]     = self._delai_var.get()
         self.cfg["csv_path"]  = self._csv_var.get()
         self.cfg["objet"]     = self._objet_var.get().strip()
+        self.cfg["pdf_dir"]   = self._pdf_dir_var.get()
         self.cfg["design"]    = self._collect_design()
 
     def _save_config(self):
@@ -739,6 +764,47 @@ class App(tk.Tk):
         save_config(self.cfg)
         self._log("Configuration sauvegardée.", "OK")
         messagebox.showinfo("Sauvegardé", "Configuration sauvegardée avec succès.")
+
+    # ── PDF ────────────────────────────────────────────────────────────────────
+
+    def _browse_pdf_dir(self):
+        path = filedialog.askdirectory(title="Choisir le dossier contenant les PDF")
+        if path:
+            self._pdf_dir_var.set(path)
+            self.cfg["pdf_dir"] = path
+            self._update_pdf_count()
+
+    def _update_pdf_count(self):
+        d = self._pdf_dir_var.get()
+        if d and os.path.isdir(d):
+            pdfs = [f for f in os.listdir(d) if f.lower().endswith(".pdf")]
+            self._lbl_pdf.config(
+                text=f"✅ {len(pdfs)} fichier(s) PDF trouvé(s) dans le dossier",
+                fg="#2d7a4f"
+            )
+        else:
+            self._lbl_pdf.config(text="Dossier introuvable.", fg="#c0392b")
+
+    def _find_pdf(self, pdf_dir, prenom, nom, email):
+        """Cherche un PDF correspondant à l'élève dans le dossier donné."""
+        if not pdf_dir or not os.path.isdir(pdf_dir):
+            return None
+        candidates = [
+            f"{prenom}_{nom}.pdf",
+            f"{nom}_{prenom}.pdf",
+            f"{prenom} {nom}.pdf",
+            f"{nom} {prenom}.pdf",
+            f"{email}.pdf",
+        ]
+        try:
+            files_lower = {f.lower(): f for f in os.listdir(pdf_dir)}
+        except Exception:
+            return None
+        for name in candidates:
+            match = files_lower.get(name.lower())
+            if match:
+                return os.path.join(pdf_dir, match)
+        return None
 
     # ── CSV ────────────────────────────────────────────────────────────────────
 
@@ -841,6 +907,7 @@ class App(tk.Tk):
         delai    = int(self.cfg["delai"])
         objet    = self.cfg["objet"]
         design   = self.cfg["design"]
+        pdf_dir  = self.cfg.get("pdf_dir", "")
         template = build_html(design)
 
         total      = len(destinataires)
@@ -887,19 +954,33 @@ class App(tk.Tk):
                         f"Cordialement"
                     )
 
-                    msg = MIMEMultipart("alternative")
+                    pdf_path = self._find_pdf(pdf_dir, prenom, nom, email)
+                    if pdf_path:
+                        msg = MIMEMultipart("mixed")
+                        alt = MIMEMultipart("alternative")
+                        alt.attach(MIMEText(corps_texte, "plain", "utf-8"))
+                        alt.attach(MIMEText(corps_html,  "html",  "utf-8"))
+                        msg.attach(alt)
+                        with open(pdf_path, "rb") as f_pdf:
+                            att = MIMEApplication(f_pdf.read(), _subtype="pdf")
+                        att.add_header("Content-Disposition", "attachment",
+                                       filename=os.path.basename(pdf_path))
+                        msg.attach(att)
+                    else:
+                        msg = MIMEMultipart("alternative")
+                        msg.attach(MIMEText(corps_texte, "plain", "utf-8"))
+                        msg.attach(MIMEText(corps_html,  "html",  "utf-8"))
                     msg["Subject"] = objet
                     msg["From"]    = user
                     msg["To"]      = email
-                    msg.attach(MIMEText(corps_texte, "plain", "utf-8"))
-                    msg.attach(MIMEText(corps_html,  "html",  "utf-8"))
 
                     try:
                         server.sendmail(user, email, msg.as_string())
                         ok_count += 1
                         idx = i + 1
-                        self.after(0, lambda p=prenom, n=nom, e=email, ix=idx:
-                            self._log(f"[{ix}/{total}] ✔ Envoyé à {p} {n} <{e}>", "OK"))
+                        pj = f" 📎 {os.path.basename(pdf_path)}" if pdf_path else ""
+                        self.after(0, lambda p=prenom, n=nom, e=email, ix=idx, pj=pj:
+                            self._log(f"[{ix}/{total}] ✔ Envoyé à {p} {n} <{e}>{pj}", "OK"))
                     except Exception as e:
                         err_list.append(email)
                         err_rows.append(dest)
