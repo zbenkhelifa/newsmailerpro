@@ -119,29 +119,8 @@ def build_html(design):
         </tr>
         <tr>
           <td style="padding:36px 40px;">
-            <p style="margin:0 0 20px;font-size:16px;color:#333;">Bonjour <strong>{{prenom}}</strong>,</p>
             {message_html}
-            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4f8;border-radius:8px;margin-bottom:32px;">
-              <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 12px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Vos identifiants</p>
-                  <table cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="padding:6px 0;font-size:14px;color:#555;width:130px;">👤 Identifiant</td>
-                      <td style="padding:6px 0;font-size:14px;color:{couleur};font-weight:700;">{{email}}</td>
-                    </tr>
-                    <tr>
-                      <td style="padding:6px 0;font-size:14px;color:#555;">🔑 Mot de passe</td>
-                      <td style="padding:6px 0;font-size:14px;color:{couleur};font-weight:700;">{{mot_de_passe}}</td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
             {boutons_html}
-            <p style="margin:0;font-size:13px;color:#999;line-height:1.6;">
-              💡 Pensez à changer votre mot de passe lors de votre première connexion.
-            </p>
           </td>
         </tr>
         <tr>
@@ -175,7 +154,7 @@ def load_config():
         "smtp_password": "",
         "smtp_tls":      True,
         "delai":         "3",
-        "objet":         "Vos identifiants de connexion",
+        "objet":         "Message",
         "csv_path":      "",
         "design":        DEFAULT_DESIGN,
     }
@@ -474,11 +453,15 @@ class App(tk.Tk):
         lf_msg.pack(fill="x", padx=14, pady=6)
 
         tk.Label(lf_msg,
-                 text="Texte libre affiché avant le bloc identifiants. Retour à la ligne = nouvelle ligne.",
+                 text="Corps du mail. Utilisez {colonne} pour insérer une valeur du CSV. Ex : Bonjour {prenom},",
                  bg="#f0f4f8", fg="#888", font=("Helvetica", 10)).pack(anchor="w", padx=10, pady=(6, 2))
-        self._msg_text = scrolledtext.ScrolledText(lf_msg, height=5,
+        self._msg_text = scrolledtext.ScrolledText(lf_msg, height=6,
                                                     font=("Helvetica", 11), wrap="word")
-        self._msg_text.pack(fill="x", padx=10, pady=(0, 8))
+        self._msg_text.pack(fill="x", padx=10, pady=(0, 4))
+        self._lbl_cols = tk.Label(lf_msg, text="Chargez un CSV pour voir les variables disponibles.",
+                                   bg="#f0f4f8", fg="#aaa", font=("Helvetica", 10),
+                                   wraplength=520, justify="left")
+        self._lbl_cols.pack(anchor="w", padx=10, pady=(0, 8))
 
         # ── Boutons ──
         lf_btn = tk.LabelFrame(inner, text=" Boutons ", bg="#f0f4f8",
@@ -602,10 +585,16 @@ class App(tk.Tk):
         from pathlib import Path
         design = self._collect_design()
         html   = build_html(design)
-        html   = html.replace("{prenom}", "Marie")\
-                     .replace("{nom}", "Dupont")\
-                     .replace("{email}", "marie.dupont@exemple.fr")\
-                     .replace("{mot_de_passe}", "Xk9#mP2q")
+        csv_path = self._csv_var.get()
+        if csv_path and os.path.exists(csv_path):
+            try:
+                rows = load_csv(csv_path)
+                if rows:
+                    for key, val in rows[0].items():
+                        html = html.replace(f"{{{key}}}",
+                                            f"<span style='background:#fff3cd;padding:0 3px'>{val}</span>")
+            except Exception:
+                pass
         fd, tmp = tempfile.mkstemp(suffix=".html", prefix="apercu_email_")
         with os.fdopen(fd, "w", encoding="utf-8") as f_tmp:
             f_tmp.write(html)
@@ -629,7 +618,17 @@ class App(tk.Tk):
         self._btn(row_csv, "📂 Parcourir", self._browse_csv, "#555").pack(side="left", padx=6)
         self._lbl_count = tk.Label(lf_csv, text="", bg="#f0f4f8",
                                    font=("Helvetica", 11), fg="#2d7a4f")
-        self._lbl_count.pack(anchor="w", padx=14, pady=(0, 6))
+        self._lbl_count.pack(anchor="w", padx=14, pady=(0, 4))
+
+        row_ecol = tk.Frame(lf_csv, bg="#f0f4f8")
+        row_ecol.pack(fill="x", padx=10, pady=(0, 8))
+        tk.Label(row_ecol, text="Colonne email :", bg="#f0f4f8",
+                 font=("Helvetica", 11), width=16, anchor="w").pack(side="left")
+        self._email_col_var = tk.StringVar()
+        self._email_col_combo = ttk.Combobox(row_ecol, textvariable=self._email_col_var,
+                                              state="readonly", width=24,
+                                              font=("Helvetica", 11))
+        self._email_col_combo.pack(side="left", padx=(4, 0))
 
         lf_msg = tk.LabelFrame(f, text=" Objet du mail ", bg="#f0f4f8",
                                font=("Helvetica", 12, "bold"), fg="#1e3a5f")
@@ -728,7 +727,8 @@ class App(tk.Tk):
         self._tls_var.set(self.cfg.get("smtp_tls", True))
         self._delai_var.set(self.cfg.get("delai", "3"))
         self._csv_var.set(self.cfg.get("csv_path", ""))
-        self._objet_var.set(self.cfg.get("objet", "Vos identifiants de connexion"))
+        self._objet_var.set(self.cfg.get("objet", "Message"))
+        self._email_col_var.set(self.cfg.get("email_col", ""))
         pdf_dir = self.cfg.get("pdf_dir", "")
         self._pdf_dir_var.set(pdf_dir)
         if pdf_dir:
@@ -756,6 +756,7 @@ class App(tk.Tk):
         self.cfg["delai"]     = self._delai_var.get()
         self.cfg["csv_path"]  = self._csv_var.get()
         self.cfg["objet"]     = self._objet_var.get().strip()
+        self.cfg["email_col"] = self._email_col_var.get()
         self.cfg["pdf_dir"]   = self._pdf_dir_var.get()
         self.cfg["design"]    = self._collect_design()
 
@@ -785,17 +786,25 @@ class App(tk.Tk):
         else:
             self._lbl_pdf.config(text="Dossier introuvable.", fg="#c0392b")
 
-    def _find_pdf(self, pdf_dir, prenom, nom, email):
-        """Cherche un PDF correspondant à l'élève dans le dossier donné."""
+    def _find_pdf(self, pdf_dir, dest, email):
+        """Cherche un PDF correspondant au destinataire dans le dossier donné."""
         if not pdf_dir or not os.path.isdir(pdf_dir):
             return None
-        candidates = [
-            f"{prenom}_{nom}.pdf",
-            f"{nom}_{prenom}.pdf",
-            f"{prenom} {nom}.pdf",
-            f"{nom} {prenom}.pdf",
-            f"{email}.pdf",
-        ]
+        prenom, nom = "", ""
+        for k, v in dest.items():
+            kl = k.strip().lower()
+            if kl in ("prenom", "prénom", "firstname", "first_name"):
+                prenom = v.strip()
+            elif kl in ("nom", "name", "lastname", "last_name", "surname"):
+                nom = v.strip()
+        candidates = []
+        if prenom and nom:
+            candidates += [
+                f"{prenom}_{nom}.pdf", f"{nom}_{prenom}.pdf",
+                f"{prenom} {nom}.pdf", f"{nom} {prenom}.pdf",
+            ]
+        if email:
+            candidates.append(f"{email}.pdf")
         try:
             files_lower = {f.lower(): f for f in os.listdir(pdf_dir)}
         except Exception:
@@ -824,8 +833,24 @@ class App(tk.Tk):
         try:
             rows = load_csv(self._csv_var.get())
             self._lbl_count.config(text=f"✅ {len(rows)} destinataire(s) chargé(s)", fg="#2d7a4f")
+            if rows:
+                cols = list(rows[0].keys())
+                self._email_col_combo["values"] = cols
+                current = self._email_col_var.get()
+                if not current or current not in cols:
+                    for c in cols:
+                        if c.strip().lower() in ("email", "mail", "e-mail", "courriel"):
+                            self._email_col_var.set(c)
+                            break
+                    else:
+                        self._email_col_var.set(cols[0])
+                self._update_col_hint(cols)
         except Exception as e:
             self._lbl_count.config(text=f"❌ Erreur lecture CSV : {e}", fg="#c0392b")
+
+    def _update_col_hint(self, cols):
+        placeholders = "   ".join(f"{{{c}}}" for c in cols)
+        self._lbl_cols.config(text=f"Variables disponibles : {placeholders}", fg="#1e3a5f")
 
     # ── Test SMTP ──────────────────────────────────────────────────────────────
 
@@ -867,6 +892,9 @@ class App(tk.Tk):
         if not self.cfg["smtp_host"] or not self.cfg["smtp_user"]:
             messagebox.showerror("Erreur", "Veuillez configurer le serveur SMTP.")
             return
+        if not self.cfg.get("email_col"):
+            messagebox.showerror("Erreur", "Veuillez sélectionner la colonne email dans l'onglet Envoi.")
+            return
         try:
             destinataires = load_csv(csv_path)
         except Exception as e:
@@ -906,9 +934,10 @@ class App(tk.Tk):
         use_tls  = self.cfg["smtp_tls"]
         delai    = int(self.cfg["delai"])
         objet    = self.cfg["objet"]
-        design   = self.cfg["design"]
-        pdf_dir  = self.cfg.get("pdf_dir", "")
-        template = build_html(design)
+        design    = self.cfg["design"]
+        pdf_dir   = self.cfg.get("pdf_dir", "")
+        email_col = self.cfg.get("email_col", "email")
+        template  = build_html(design)
 
         total      = len(destinataires)
         ok_count   = 0
@@ -930,31 +959,25 @@ class App(tk.Tk):
                         self.after(0, lambda: self._log("Envoi interrompu par l'utilisateur.", "WARN"))
                         break
 
-                    nom    = dest.get("nom", "").strip()
-                    prenom = dest.get("prenom", "").strip()
-                    email  = dest.get("email", "").strip()
-                    mdp    = dest.get("mot_de_passe", "").strip()
-
+                    # Récupérer l'adresse email depuis la colonne configurée
+                    email = ""
+                    for k, v in dest.items():
+                        if k.strip().lower() == email_col.strip().lower():
+                            email = v.strip()
+                            break
                     if not email:
-                        self.after(0, lambda n=nom, p=prenom:
-                            self._log(f"Email manquant pour {p} {n} — ignoré", "WARN"))
+                        self.after(0, lambda ix=i+1:
+                            self._log(f"Ligne {ix} : colonne '{email_col}' vide — ignorée", "WARN"))
                         continue
 
-                    corps_html = template.replace("{prenom}", prenom)\
-                                         .replace("{nom}", nom)\
-                                         .replace("{email}", email)\
-                                         .replace("{mot_de_passe}", mdp)
+                    # Substitution dynamique de toutes les colonnes CSV
+                    corps_html  = template
+                    corps_texte = design.get("message", "")
+                    for key, val in dest.items():
+                        corps_html  = corps_html.replace(f"{{{key}}}", val)
+                        corps_texte = corps_texte.replace(f"{{{key}}}", val)
 
-                    corps_texte = (
-                        f"Bonjour {prenom},\n\n"
-                        f"Vos identifiants de connexion :\n"
-                        f"  Identifiant  : {email}\n"
-                        f"  Mot de passe : {mdp}\n\n"
-                        f"Pensez à changer votre mot de passe lors de votre première connexion.\n\n"
-                        f"Cordialement"
-                    )
-
-                    pdf_path = self._find_pdf(pdf_dir, prenom, nom, email)
+                    pdf_path = self._find_pdf(pdf_dir, dest, email)
                     if pdf_path:
                         msg = MIMEMultipart("mixed")
                         alt = MIMEMultipart("alternative")
@@ -979,8 +1002,8 @@ class App(tk.Tk):
                         ok_count += 1
                         idx = i + 1
                         pj = f" 📎 {os.path.basename(pdf_path)}" if pdf_path else ""
-                        self.after(0, lambda p=prenom, n=nom, e=email, ix=idx, pj=pj:
-                            self._log(f"[{ix}/{total}] ✔ Envoyé à {p} {n} <{e}>{pj}", "OK"))
+                        self.after(0, lambda e=email, ix=idx, pj=pj:
+                            self._log(f"[{ix}/{total}] ✔ Envoyé à {e}{pj}", "OK"))
                     except Exception as e:
                         err_list.append(email)
                         err_rows.append(dest)
@@ -1011,7 +1034,8 @@ class App(tk.Tk):
                 err_path = os.path.join(data_dir, f"erreurs_{ts}.csv")
                 try:
                     with open(err_path, "w", newline="", encoding="utf-8-sig") as f_err:
-                        writer = csv.DictWriter(f_err, fieldnames=["nom","prenom","email","mot_de_passe"])
+                        fieldnames = list(err_rows[0].keys()) if err_rows else []
+                        writer = csv.DictWriter(f_err, fieldnames=fieldnames)
                         writer.writeheader()
                         writer.writerows(err_rows)
                     self._log(f"CSV erreurs exporté → data/erreurs_{ts}.csv", "WARN")
