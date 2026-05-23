@@ -595,10 +595,11 @@ class App(tk.Tk):
                                             f"<span style='background:#fff3cd;padding:0 3px'>{val}</span>")
             except Exception:
                 pass
-        fd, tmp = tempfile.mkstemp(suffix=".html", prefix="apercu_email_")
-        with os.fdopen(fd, "w", encoding="utf-8") as f_tmp:
+        # Écriture dans le dossier home (accessible aux navigateurs sandboxés)
+        preview_path = Path.home() / "apercu_email_preview.html"
+        with open(preview_path, "w", encoding="utf-8") as f_tmp:
             f_tmp.write(html)
-        webbrowser.open(Path(tmp).as_uri())
+        webbrowser.open(preview_path.as_uri())
 
     # ── Onglet Envoi ───────────────────────────────────────────────────────────
 
