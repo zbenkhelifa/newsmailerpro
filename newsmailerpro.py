@@ -9,6 +9,7 @@ import time
 import threading
 import hashlib
 import socket
+import tempfile
 import urllib.request
 import urllib.error
 from email.mime.text import MIMEText
@@ -597,19 +598,18 @@ class App(tk.Tk):
         }
 
     def _preview_html(self):
+        import webbrowser
+        from pathlib import Path
         design = self._collect_design()
         html   = build_html(design)
-        # Remplacer les variables par des valeurs d'exemple
         html   = html.replace("{prenom}", "Marie")\
                      .replace("{nom}", "Dupont")\
                      .replace("{email}", "marie.dupont@exemple.fr")\
                      .replace("{mot_de_passe}", "Xk9#mP2q")
-        # Écrire dans un fichier temporaire et l'ouvrir
-        tmp = os.path.join(os.path.dirname(__file__), "_apercu_email.html")
-        with open(tmp, "w", encoding="utf-8") as f_tmp:
+        fd, tmp = tempfile.mkstemp(suffix=".html", prefix="apercu_email_")
+        with os.fdopen(fd, "w", encoding="utf-8") as f_tmp:
             f_tmp.write(html)
-        import webbrowser
-        webbrowser.open(f"file:///{tmp.replace(os.sep, '/')}")
+        webbrowser.open(Path(tmp).as_uri())
 
     # ── Onglet Envoi ───────────────────────────────────────────────────────────
 
