@@ -6,7 +6,7 @@ Ce fichier est lu automatiquement par Claude Code à chaque session.
 
 ## Contexte
 
-Projet : **NewsMailer Pro** — Application Python (tkinter) d'envoi d'identifiants par email avec système de licences commerciales.
+Projet : **MailCent Pro** — Application Python (tkinter) d'envoi d'identifiants par email avec système de licences commerciales.
 Développeur : Zahire, enseignant-développeur indépendant, Académie de Versailles.
 
 Stack :
@@ -21,8 +21,8 @@ Stack :
 ## Structure
 
 ```
-newsmailerpro/
-├── newsmailerpro.py       ← App principale (tkinter)
+mailcentpro/
+├── mailcentpro.py       ← App principale (tkinter)
 ├── build_windows.bat           ← Génère le .exe Windows
 ├── install_stripe.sh           ← Installe Stripe CLI sur Lubuntu
 ├── CLAUDE.md                   ← Ce fichier
@@ -101,6 +101,6 @@ build_windows.bat
 
 | Fichier | Valeur à remplacer |
 |---|---|
-| `newsmailerpro.py` ligne ~18 | URL Edge Function Supabase |
+| `mailcentpro.py` ligne ~18 | URL Edge Function Supabase |
 | `supabase/generer_licence.py` lignes 31-32 | URL + service_role key Supabase |
 | `supabase/functions/stripe-webhook/index.ts` | Variables via env Supabase |

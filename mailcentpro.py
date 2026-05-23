@@ -289,7 +289,7 @@ def verifier_au_demarrage(parent, callback_succes):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("NewsMailer Pro")
+        self.title("MailCent Pro")
         self.geometry("860x740")
         self.resizable(True, True)
         self.configure(bg="#f0f4f8")
@@ -318,7 +318,7 @@ class App(tk.Tk):
     def _build_ui(self):
         header = tk.Frame(self, bg="#1e3a5f", pady=10)
         header.pack(fill="x")
-        tk.Label(header, text="NewsMailer Pro",
+        tk.Label(header, text="MailCent Pro",
                  bg="#1e3a5f", fg="white", font=("Helvetica", 17, "bold")).pack()
 
         style = ttk.Style()

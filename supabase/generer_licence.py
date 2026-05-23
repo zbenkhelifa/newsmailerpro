@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Générateur et gestionnaire de licences — NewsMailer Pro
+Générateur et gestionnaire de licences — MailCent Pro
 Utilisation :
     python generer_licence.py                     → générer une nouvelle licence
     python generer_licence.py --list              → lister toutes les licences
@@ -110,7 +110,7 @@ def supprimer_licence(cle):
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Gestionnaire de licences NewsMailer Pro")
+    parser = argparse.ArgumentParser(description="Gestionnaire de licences MailCent Pro")
     parser.add_argument("--list",      action="store_true", help="Lister les licences")
     parser.add_argument("--suspend",   metavar="CLE",       help="Suspendre une licence")
     parser.add_argument("--activer",   metavar="CLE",       help="Réactiver une licence")

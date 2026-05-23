@@ -1,4 +1,4 @@
-name: Build & Release NewsMailerPro
+name: Build & Release MailCentPro
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ jobs:
         include:
           - os: windows-latest
             platform: Windows
-            zip_name: NewsMailerPro-Windows.zip
+            zip_name: MailCentPro-Windows.zip
           - os: macos-latest
             platform: Mac
-            zip_name: NewsMailerPro-Mac.zip
+            zip_name: MailCentPro-Mac.zip
           - os: ubuntu-latest
             platform: Linux
-            zip_name: NewsMailerPro-Linux.zip
+            zip_name: MailCentPro-Linux.zip
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -49,22 +49,22 @@ jobs:
 
       - name: Compiler (Windows)
         if: matrix.platform == 'Windows'
-        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
+        run: pyinstaller --onefile --windowed --name "MailCentPro" --hidden-import tkinter --clean mailcentpro.py
 
       - name: Compiler (Mac)
         if: matrix.platform == 'Mac'
-        run: pyinstaller --onefile --windowed --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
+        run: pyinstaller --onefile --windowed --name "MailCentPro" --hidden-import tkinter --clean mailcentpro.py
 
       - name: Compiler (Linux)
         if: matrix.platform == 'Linux'
-        run: python3 -m PyInstaller --onefile --name "NewsMailerPro" --hidden-import tkinter --clean newsmailerpro.py
+        run: python3 -m PyInstaller --onefile --name "MailCentPro" --hidden-import tkinter --clean mailcentpro.py
 
       - name: Créer le zip (Windows)
         if: matrix.platform == 'Windows'
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release_tmp
-          Copy-Item dist\NewsMailerPro.exe release_tmp\
+          Copy-Item dist\MailCentPro.exe release_tmp\
           Copy-Item -Recurse data release_tmp\data
           Compress-Archive -Path release_tmp\* -DestinationPath ${{ matrix.zip_name }}
 
@@ -72,7 +72,7 @@ jobs:
         if: matrix.platform != 'Windows'
         run: |
           mkdir -p release_tmp
-          cp dist/NewsMailerPro release_tmp/
+          cp dist/MailCentPro release_tmp/
           cp -r data release_tmp/data
           cd release_tmp && zip -r ../${{ matrix.zip_name }} .
 

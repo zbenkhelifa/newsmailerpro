@@ -1,13 +1,13 @@
-# NewsMailer Pro
+# MailCent Pro
 
 Application Python (tkinter) pour envoyer les identifiants de connexion aux élèves par email.
 
 ## Structure
 
 ```
-newsmailerpro/
-├── newsmailerpro.py        ← Application principale
-├── build_windows.bat       ← Génère NewsMailerPro.exe
+mailcentpro/
+├── mailcentpro.py        ← Application principale
+├── build_windows.bat       ← Génère MailCentPro.exe
 ├── data/
 │   └── eleves_exemple.csv  ← Modèle de fichier CSV
 └── supabase/
@@ -20,7 +20,7 @@ newsmailerpro/
 ## Lancement (développement)
 
 ```bash
-python newsmailerpro.py
+python mailcentpro.py
 ```
 
 Python 3.8+ requis. Aucune bibliothèque externe nécessaire (stdlib uniquement).
@@ -31,10 +31,10 @@ Python 3.8+ requis. Aucune bibliothèque externe nécessaire (stdlib uniquement)
 build_windows.bat
 ```
 
-Génère `NewsMailerPro.exe` — à uploader dans la GitHub Release v1.0 :
+Génère `MailCentPro.exe` — à uploader dans la GitHub Release v1.0 :
 
 ```bash
-gh release upload v1.0 NewsMailerPro.zip --repo zbenkhelifa/newsmailerpro
+gh release upload v1.0 MailCentPro.zip --repo zbenkhelifa/mailcentpro
 ```
 
 ## Format du fichier CSV

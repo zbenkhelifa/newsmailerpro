@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul
-title Compilation NewsMailerPro.exe
+title Compilation MailCentPro.exe
 
 echo.
 echo ╔══════════════════════════════════════════════╗
-echo ║   Compilation de NewsMailerPro.exe           ║
+echo ║   Compilation de MailCentPro.exe           ║
 echo ╚══════════════════════════════════════════════╝
 echo.
 
@@ -39,7 +39,7 @@ REM ── Compiler ────────────────────
 echo 🔨 Compilation en cours, merci de patienter...
 echo.
 
-pyinstaller --onefile --windowed --name "NewsMailerPro" --clean newsmailerpro.py
+pyinstaller --onefile --windowed --name "MailCentPro" --clean mailcentpro.py
 
 if errorlevel 1 (
     echo.
@@ -49,7 +49,7 @@ if errorlevel 1 (
 )
 
 REM ── Copier le .exe à la racine ─────────────────────────────────────────────
-copy /Y "dist\NewsMailerPro.exe" "NewsMailerPro.exe" >nul
+copy /Y "dist\MailCentPro.exe" "MailCentPro.exe" >nul
 
 REM ── Nettoyage ──────────────────────────────────────────────────────────────
 rmdir /S /Q build >nul 2>&1
@@ -60,7 +60,7 @@ echo.
 echo ╔══════════════════════════════════════════════╗
 echo ║   ✅ Compilation réussie !                   ║
 echo ║                                              ║
-echo ║   → NewsMailerPro.exe créé                  ║
+echo ║   → MailCentPro.exe créé                  ║
 echo ║                                              ║
 echo ║   Placez le .exe à côté du dossier data/    ║
 echo ║   et double-cliquez pour lancer.             ║
